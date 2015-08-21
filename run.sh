@@ -60,6 +60,6 @@ while true
 
 }
 
-
+backup_and_stream_to_s3
 
 wait
