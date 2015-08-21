@@ -19,13 +19,14 @@ else
   echo "Please enter a base uri in which to access the Stash instance!"
   exit 1
 fi
+
+## Lets see if they give us a new BACKUP_HOME to use. Or else, this is already set in the dockerfile.
+
 if [ -n "$BACKUP_HOME" ]; then
   OPTS="$OPTS -Dbackup.home=$BACKUP_HOME"
-else
-  echo "Please submit the backup home directory to use!"
-  exit 1
 fi
 
+## Omnom/Check ALL the vars
 
 : ${AWS_ACCESS_KEY_ID:?"AWS_ACCESS_KEY_ID not specified"} 
 : ${AWS_SECRET_ACCESS_KEY:?"AWS_SECRET_ACCESS_KEY not specified"} 
