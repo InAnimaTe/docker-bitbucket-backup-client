@@ -20,6 +20,13 @@ else
   exit 1
 fi
 
+## Lets handle the STASH_HOME var
+if [ -n "$STASH_HOME" ]; then
+    OPTS="$OPTS -Dstash.home=$STASH_HOME"
+else
+    OPTS="$OPTS -Dstash.home=/var/atlassian/application-data/stash"
+fi
+
 ## Lets see if they give us a new BACKUP_HOME to use. Or else, this is already set in the dockerfile.
 
 if [ -n "$BACKUP_HOME" ]; then
@@ -32,8 +39,6 @@ fi
 : ${AWS_SECRET_ACCESS_KEY:?"AWS_SECRET_ACCESS_KEY not specified"} 
 : ${BUCKET:?"BUCKET not specified"} 
 : ${SYMMETRIC_PASSPHRASE:?"SYMMETRIC_PASSPHRASE not specified"} 
-
-STASH_HOME=${STASH_HOME:-/var/atlassian/application-data/stash}
 
 TIMEOUT=${TIMEOUT:-86400}
 XZ_COMPRESSION_LEVEL=${XZ_COMPRESSION_LEVEL:-9}
