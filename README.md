@@ -32,7 +32,7 @@ docker run --rm \
 * `BACKUP_HOME` - The place for stash-backup-client to dump the backup. (default: `/opt/backup`; *leave this as is for compression, encryption, and sending to s3 to work properly. See `run.sh` for more.*)
 * `STASH_HOME` - The home directory of your stash installation (default: `/var/atlassian/application-data/stash`; *the location this container will inherit from your volumes{-from} in which your install home lives*)
 * `TIMEOUT` - How often perform backup, in seconds. (default: `86400`) 
-* `NAME_PREFIX` - A prefix in front of the date i.e. `jira-data-dir-backup` (default: `backup-archive`) 
+* `NAME_PREFIX` - A prefix in front of the date i.e. `jira-data-dir-backup` (default: `stash-archive`) 
 * `GPG_COMPRESSION_LEVEL` - The compression level for gpg to use (0-9). (default: `0`; *not recommended since we're using xz*) 
 * `XZ_COMPRESSION_LEVEL` - The compression level for xz (lzma2) to use (0-9). (default: `9`; *this is the best compression level*) 
 * `CIPHER_ALGO` - The cipher for gpg to utilize when encrypting your archive. (default: `aes256`) 
