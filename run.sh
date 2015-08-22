@@ -55,10 +55,10 @@ while true
     BACKUP="${NAME_PREFIX}_`date +"%Y-%m-%d_%H-%M"`${EXTENSION}" 
     echo "Set backup file name to: $BACKUP" 
     echo "Starting stash backup.." 
-    rm -f ${BACKUP_HOME}/backups/*
+    rm -rf ${BACKUP_HOME}/*
     java $OPTS -jar /opt/stash/stash-backup-client/stash-backup-client.jar && \
-      xz -${XZ_COMPRESSION_LEVEL} -zf -c ${BACKUP_HOME}/* | gpg -c --cipher-algo ${CIPHER_ALGO} -z ${GPG_COMPRESSION_LEVEL} --passphrase "${SYMMETRIC_PASSPHRASE}" | aws s3 cp - "${BUCKET}/${BACKUP}" "${AWSCLI_OPTIONS}"
-    rm -f ${BACKUP_HOME}/backups/*
+      tar cf - ${BACKUP_HOME} | xz -${XZ_COMPRESSION_LEVEL} -zf - | gpg -c --cipher-algo ${CIPHER_ALGO} -z ${GPG_COMPRESSION_LEVEL} --passphrase "${SYMMETRIC_PASSPHRASE}" | aws s3 cp - "${BUCKET}/${BACKUP}" "${AWSCLI_OPTIONS}"
+    rm -rf ${BACKUP_HOME}/*
     echo "Backup finished! Sleeping ${TIMEOUT}s" 
     sleep $TIMEOUT 
   done 
