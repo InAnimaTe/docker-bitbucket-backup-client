@@ -1,0 +1,40 @@
+stash: 
+  image: atlassian/stash:3.11 
+  restart: always 
+  hostname: git.example.io 
+  ports: 
+      - "7990" 
+      - "22:7999" 
+  volumes: 
+      - /mnt/data/stash:/var/atlassian/application-data/stash
+  links: 
+    - postgresql 
+
+postgresql: 
+  image: sameersbn/postgresql:9.4-2 
+  restart: always 
+  volumes: 
+    - /mnt/data/stash-postgresql:/var/lib/postgresql 
+  environment: 
+    - 'PSQL_TRUST_LOCALNET=true' 
+    - 'DB_USER=stash' 
+    - 'DB_PASS=AWESMEDBPass' 
+    - 'DB_NAME=stashdatabase' 
+
+stashbackupclient: 
+    image: inanimate/stash-backup-client:1.0
+    restart: always 
+    links: 
+        - stash 
+        - postgresql 
+    volumes_from: 
+        - stash 
+    environment: 
+        - "STASH_USER=stashadmin" 
+        - "STASH_PASSWORD=HARDCOREPASSWORDNOWAIHAX0R" 
+        - "STASH_BASE_URI=http://stash:7990/" 
+        - "AWS_ACCESS_KEY_ID=YOURAWSACCESSKEYBR0" 
+        - "AWS_SECRET_ACCESS_KEY=SECRETKEYBREH"
+        - "BUCKET=s3://BUCKETNAME/SUBDIRECTORY" 
+        - "SYMMETRIC_PASSPHRASE=SUPERDUPERSECUREPASSWORD" 
+

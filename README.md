@@ -6,14 +6,33 @@ A simple script has been included that takes environment variables and adds them
 
 #### Up and Running
 
-docker run --rm \
-  --env STASH_USER=admin \
-  --env STASH_PASSWORD=admin \
-  --env STASH_BASE_URI=<stash url> \
-  --volumes-from=<stash-data-container> \
-  -v <place to store backup>:/opt/backup \
-  kristoffer/atlassian-stash-backup-client
+See the included `docker-compose.yml.example` file which gives a lose example of how I deploy stash in my environment. 
+Here is a stanza from that example focused on just utilizing this image:
 
+```
+stashbackupclient:  
+    image: inanimate/stash-backup-client:1.0 
+    restart: always  
+    links:  
+        - stash  
+        - postgresql  
+    volumes_from:  
+        - stash  
+    environment:  
+        - "STASH_USER=stashadmin"  
+        - "STASH_PASSWORD=HARDCOREPASSWORDNOWAIHAX0R"  
+        - "STASH_BASE_URI=http://stash:7990/"  
+        - "AWS_ACCESS_KEY_ID=YOURAWSACCESSKEYBR0"  
+        - "AWS_SECRET_ACCESS_KEY=SECRETKEYBREH" 
+        - "BUCKET=s3://BUCKETNAME/SUBDIRECTORY"  
+        - "SYMMETRIC_PASSPHRASE=SUPERDUPERSECUREPASSWORD"  
+```
+
+A few important points here:
+
+* Linking is important here. The stash backup client needs to be able to access the webui and database to fully backup.
+* We `volumes-from` the `stash` container as the backup client archives the stash home/data directory (which includes your repositories)
+* I'll be tagging my hub repo exactly to the git repository. I encourage you to always pull from a tag as defaults may change over time etc.. 
 
 #### Environment variables 
 
