@@ -2,7 +2,15 @@
 
 See [here](https://confluence.atlassian.com/display/STASH/Using+the+Stash+Backup+Client) for documentation on the backup client.
 
-A simple script has been included that takes environment variables and adds them as defines to the java command. So running a backup could look like this:
+A simple script has been included that takes environment variables and adds them as defines to the java command.
+
+The flow here looks like this:
+
+1. Generate the name for the new backup and clear out any previous backups in the BACKUP_HOME
+2. Spawn the backup client. This backs up the stash data directory and database in a tar archive. It also outputs a log file of the entire run.
+3. Tar (to include the log file), compress (xz with lzma2), encrypt (gpg symmetric key), and copy the archive to s3 (awscli s3 cp).
+4. Remove the archive after its been uploaded. (We assume its been uploaded and is no longer needed)
+5. Wait TIMEOUT to do it all again.
 
 #### Up and Running
 
