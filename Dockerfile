@@ -2,12 +2,12 @@ FROM java:8u40-jre
 
 # Download and unzip Stash Backup Client
 
-ENV STASH_BACKUP_CLIENT_VERSION 1.9.1
+ENV BITBUCKET_BACKUP_CLIENT_VERSION 2000000
 
-RUN curl -Lks https://maven.atlassian.com/content/repositories/atlassian-public/com/atlassian/stash/backup/stash-backup-distribution/${STASH_BACKUP_CLIENT_VERSION}/stash-backup-distribution-${STASH_BACKUP_CLIENT_VERSION}.zip -o /root/stash-backup-client.zip
+RUN curl -Lks https://marketplace.atlassian.com/download/plugins/com.atlassian.stash.backup.client/version/${BITBUCKET_BACKUP_CLIENT_VERSION} -o /root/stash-backup-client.zip
 RUN mkdir /opt/stash
 RUN unzip /root/stash-backup-client.zip -d /opt/stash
-RUN mv /opt/stash/stash-backup-client-* /opt/stash/stash-backup-client
+RUN mv /opt/stash/bitbucket-backup-client-* /opt/stash/bitbucket-backup-client
 
 ## Lets install the necessities to compress, encrypt, and send to s3
 
