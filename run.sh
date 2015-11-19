@@ -1,30 +1,30 @@
 #!/bin/bash -e
 
 
-if [ -n "$STASH_USER" ]; then
-  OPTS="$OPTS -Dstash.user=$STASH_USER"
+if [ -n "$BITBUCKET_USER" ]; then
+  OPTS="$OPTS -Dbitbucket.user=$BITBUCKET_USER"
 else
   echo "You must enter an Administrative user in which to use to backup Stash!"
   exit 1
 fi
-if [ -n "$STASH_PASSWORD" ]; then
-  OPTS="$OPTS -Dstash.password=$STASH_PASSWORD"
+if [ -n "$BITBUCKET_PASSWORD" ]; then
+  OPTS="$OPTS -Dbitbucket.password=$BITBUCKET_PASSWORD"
 else
   echo "You must enter the password of the Administrative user!"
   exit 1
 fi
-if [ -n "$STASH_BASE_URI" ]; then
-  OPTS="$OPTS -Dstash.baseUrl=$STASH_BASE_URI"
+if [ -n "$BITBUCKET_BASE_URI" ]; then
+  OPTS="$OPTS -Dbitbucket.baseUrl=$BITBUCKET_BASE_URI"
 else
   echo "Please enter a base uri in which to access the Stash instance!"
   exit 1
 fi
 
 ## Lets handle the STASH_HOME var
-if [ -n "$STASH_HOME" ]; then
-    OPTS="$OPTS -Dstash.home=$STASH_HOME"
+if [ -n "$BITBUCKET_HOME" ]; then
+    OPTS="$OPTS -Dbitbucket.home=$BITBUCKET_HOME"
 else
-    OPTS="$OPTS -Dstash.home=/var/atlassian/application-data/stash"
+    OPTS="$OPTS -Dbitbucket.home=/var/atlassian/application-data/bitbucket"
 fi
 
 ## Lets see if they give us a new BACKUP_HOME to use. Or else, this is already set in the dockerfile.
@@ -54,9 +54,9 @@ while true
   do
     BACKUP="${NAME_PREFIX}_`date +"%Y-%m-%d_%H-%M"`${EXTENSION}" 
     echo "Set backup file name to: $BACKUP" 
-    echo "Starting stash backup.." 
+    echo "Starting Bitbucket backup.." 
     rm -rf ${BACKUP_HOME}/*
-    java $OPTS -jar /opt/stash/stash-backup-client/stash-backup-client.jar && \
+    java $OPTS -jar /opt/stash/bitbucket-backup-client/bitbucket-backup-client.jar && \
       tar cf - ${BACKUP_HOME} | xz -${XZ_COMPRESSION_LEVEL} -zf - | gpg -c --cipher-algo ${CIPHER_ALGO} -z ${GPG_COMPRESSION_LEVEL} --passphrase "${SYMMETRIC_PASSPHRASE}" | aws s3 cp - "${BUCKET}/${BACKUP}" "${AWSCLI_OPTIONS}"
     rm -rf ${BACKUP_HOME}/*
     echo "Backup finished! Sleeping ${TIMEOUT}s" 
