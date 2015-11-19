@@ -1,4 +1,7 @@
-### Stash Backup Client Docker image
+### Bitbucket Backup Client Docker image
+
+> Note: With 4.0, Atlassian has changed the official name to Bitbucket Server! You'll still see some references to stash in this readme but I have updated all necessary code and Dockerfile references properly!
+
 
 See [here](https://confluence.atlassian.com/display/STASH/Using+the+Stash+Backup+Client) for documentation on the backup client.
 
@@ -47,9 +50,9 @@ A few important points here:
 ##### *Required* 
 
 
-* `STASH_USER` - The Administrative user account in which to create the backup from.
-* `STASH_PASSWORD` - The password for the above administrative user.
-* `STASH_BASE_URI` - The base uri in which to access your stash instance i.e. `http://git.example.net/`
+* `BITBUCKET_USER` - The Administrative user account in which to create the backup from.
+* `BITBUCKET_PASSWORD` - The password for the above administrative user.
+* `BITBUCKET_BASE_URI` - The base uri in which to access your stash instance i.e. `http://git.example.net/`
 * `AWS_ACCESS_KEY_ID` - AWS S3 access key. 
 * `AWS_SECRET_ACCESS_KEY` - AWS S3 secret key. 
 * `BUCKET` - AWS S3 bucket (and folder) to store the backup. i.e. `s3://herpderpbucket/folder` 
@@ -57,7 +60,7 @@ A few important points here:
 
 ##### *Optional* 
 * `BACKUP_HOME` - The place for stash-backup-client to dump the backup. (default: `/opt/backup`; *leave this as is for compression, encryption, and sending to s3 to work properly. See `run.sh` for more.*)
-* `STASH_HOME` - The home directory of your stash installation (default: `/var/atlassian/application-data/stash`; *the location this container will inherit from your volumes{-from} in which your install home lives*)
+* `BITBUCKET_HOME` - The home directory of your stash installation (default: `/var/atlassian/application-data/stash`; *the location this container will inherit from your volumes{-from} in which your install home lives*)
 * `TIMEOUT` - How often perform backup, in seconds. (default: `86400`) 
 * `NAME_PREFIX` - A prefix in front of the date i.e. `jira-data-dir-backup` (default: `stash-archive`) 
 * `GPG_COMPRESSION_LEVEL` - The compression level for gpg to use (0-9). (default: `0`; *not recommended since we're using xz*) 
